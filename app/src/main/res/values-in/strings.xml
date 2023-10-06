@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Story App</string>
+    <string name="sign_in">Masuk</string>
+    <string name="register">Daftar</string>
+    <string name="create_an_account">Buat Akun</string>
+    <string name="or">- ATAU -</string>
+    <string name="sign_in_to_your_account">Masuk ke akun anda</string>
+    <string name="lets_sign_in_to_your_account">Ayo masuk ke akun anda</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Sandi</string>
+    <string name="full_name">Nama Lengkap</string>
+    <string name="dont_have_an_account">Belum punya akun?</string>
+    <string name="already_have_an_account">Sudah punya akun?</string>
+    <string name="getting_started">Memulai</string>
+    <string name="let_s_create_your_account_here">Mari buat akun Anda di sini</string>
+    <string name="story_image">Gambar Cerita</string>
+    <string name="logout">Keluar</string>
+    <string name="toggle_theme">Ubah Tema</string>
+    <string name="create_new_story">Buat Cerita Baru</string>
+    <string name="post">Posting</string>
+    <string name="gallery">Galeri</string>
+    <string name="camera">Kamera</string>
+    <string name="description">Deskripsi</string>
+    <string name="your_account_has_been_created">Akun Anda telah berhasil dibuat</string>
+    <string name="please_login_to_your_account">Silakan masuk ke akun Anda</string>
+    <string name="success">%1$s Berhasil</string>
+    <string name="failed_opening_the_camera">Gagal membuka kamera.</string>
+    <string name="failed_to_take_a_picture">Gagal mengambil foto.</string>
+    <string name="no_media_selected">Tidak ada media yang dipilih</string>
+    <string name="image_is_required_to_make_a_story">Gambar diperlukan untuk membuat cerita</string>
+    <string name="permission_request_granted">Permintaan izin disetujui</string>
+    <string name="permission_request_denied">Permintaan izin ditolak</string>
+    <string name="no_internet">Tidak Ada Koneksi Internet</string>
+    <string name="something_wrong">Ada yang salah...</string>
+    <string name="cancel">Batal</string>
+    <string name="are_you_sure_you_want_to_logout">Anda yakin ingin Keluar?</string>
+</resources>

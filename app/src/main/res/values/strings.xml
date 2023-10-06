@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Story App</string>
+    <string name="sign_in">Sign In</string>
+    <string name="register">Register</string>
+    <string name="create_an_account">Create an Account</string>
+    <string name="or">- OR -</string>
+    <string name="sign_in_to_your_account">Sign in to your account</string>
+    <string name="lets_sign_in_to_your_account">Let\'s sign in to your account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="dont_have_an_account">Don\'t have an account ?</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="getting_started">Getting Started</string>
+    <string name="let_s_create_your_account_here">Let\'s create your account here</string>
+    <string name="story_image">Story Image</string>
+    <string name="logout">Logout</string>
+    <string name="toggle_theme">Toggle Theme</string>
+    <string name="create_new_story">Create New Story</string>
+    <string name="post">Post</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="description">Description</string>
+    <string name="your_account_has_been_created">Your account has been created</string>
+    <string name="please_login_to_your_account">Please login to your account</string>
+    <string name="success">%1$s Success</string>
+    <string name="failed_opening_the_camera">Failed opening the camera.</string>
+    <string name="failed_to_take_a_picture">Failed to take a picture.</string>
+    <string name="no_media_selected">No media selected</string>
+    <string name="image_is_required_to_make_a_story">Image is required to make a story</string>
+    <string name="permission_request_granted">Permission request granted</string>
+    <string name="permission_request_denied">Permission request denied</string>
+    <string name="no_internet">No internet</string>
+    <string name="something_wrong">Something wrong...</string>
+    <string name="cancel">Cancel</string>
+    <string name="are_you_sure_you_want_to_logout">Are you sure you want to logout?</string>
+</resources>
