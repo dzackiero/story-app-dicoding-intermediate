@@ -1,6 +1,7 @@
 package com.pnj.storyapp.data.pref
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -17,7 +18,8 @@ class UserPreferences private constructor(private val dataStore: DataStore<Prefe
 
     fun getThemeSetting(): Flow<Boolean> {
         return dataStore.data.map { preferences ->
-            preferences[THEME_KEY] ?: false
+            preferences[THEME_KEY]
+                ?: (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES)
         }
     }
 

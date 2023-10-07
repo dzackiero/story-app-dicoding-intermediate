@@ -1,19 +1,16 @@
 package com.pnj.storyapp.ui.register
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
-import com.google.android.material.progressindicator.IndeterminateDrawable
 import com.pnj.storyapp.R
 import com.pnj.storyapp.databinding.ActivityRegisterBinding
-import com.pnj.storyapp.util.Result
 import com.pnj.storyapp.ui.ViewModelFactory
 import com.pnj.storyapp.ui.login.LoginActivity
+import com.pnj.storyapp.util.Result
 import com.pnj.storyapp.util.ValidateType
 import com.pnj.storyapp.util.showLoading
 import com.pnj.storyapp.util.showToast
@@ -92,15 +89,11 @@ class RegisterActivity : AppCompatActivity() {
     private fun validateForm(): Boolean {
         binding.apply {
             val validates = listOf(
-                edRegisterEmail.validate("Email cannot be empty", ValidateType.REQUIRED),
-                edRegisterEmail.validate("Must be a valid email", ValidateType.EMAIL),
-                edRegisterName.validate("Name cannot be empty", ValidateType.REQUIRED),
-                edRegisterPassword.validate("Password cannot be empty", ValidateType.REQUIRED),
-                edRegisterPassword.validate(
-                    "a password must contain at least 8 characters",
-                    ValidateType.MIN_CHAR,
-                    8
-                ),
+                edRegisterEmail.validate("Email", ValidateType.REQUIRED),
+                edRegisterEmail.validate("Email", ValidateType.EMAIL),
+                edRegisterName.validate("Name", ValidateType.REQUIRED),
+                edRegisterPassword.validate("Password", ValidateType.REQUIRED),
+                edRegisterPassword.validate("Password", ValidateType.MIN_CHAR, 8),
             )
 
             return !validates.contains(false)

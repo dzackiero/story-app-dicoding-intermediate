@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.core.view.isVisible
 import com.pnj.storyapp.R
 import com.pnj.storyapp.databinding.ActivityLoginBinding
 import com.pnj.storyapp.ui.ViewModelFactory
@@ -76,14 +75,10 @@ class LoginActivity : AppCompatActivity() {
     private fun validateForm(): Boolean {
         binding.apply {
             val validates = listOf(
-                edLoginEmail.validate("Email cannot be empty", ValidateType.REQUIRED),
-                edLoginEmail.validate("Must be a valid email", ValidateType.EMAIL),
-                edLoginPassword.validate("Password cannot be empty", ValidateType.REQUIRED),
-                edLoginPassword.validate(
-                    "a password must contain at least 8 characters",
-                    ValidateType.MIN_CHAR,
-                    8
-                ),
+                edLoginEmail.validate("Email", ValidateType.REQUIRED),
+                edLoginEmail.validate("Email", ValidateType.EMAIL),
+                edLoginPassword.validate("Password", ValidateType.REQUIRED),
+                edLoginPassword.validate("Password", ValidateType.MIN_CHAR, 8),
             )
 
             return !validates.contains(false)

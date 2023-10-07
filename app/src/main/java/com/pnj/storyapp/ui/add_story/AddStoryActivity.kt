@@ -138,7 +138,7 @@ class AddStoryActivity : AppCompatActivity() {
                         is Result.Error -> {
                             binding.fabUploadStory.showLoading(
                                 false,
-                                ContextCompat.getDrawable(this, R.drawable.ic_camera)
+                                ContextCompat.getDrawable(this, R.drawable.ic_send)
                             )
                             binding.fabUploadStory.isEnabled = true
                             showToast(result.error)
@@ -147,7 +147,7 @@ class AddStoryActivity : AppCompatActivity() {
                         is Result.Success -> {
                             binding.fabUploadStory.showLoading(
                                 false,
-                                ContextCompat.getDrawable(this, R.drawable.ic_camera)
+                                ContextCompat.getDrawable(this, R.drawable.ic_send)
                             )
                             binding.fabUploadStory.isEnabled = true
                             showToast(result.data.message)

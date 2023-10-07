@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import com.google.android.material.textfield.TextInputEditText
 import com.pnj.storyapp.R
 
-class PasswordEditText : TextInputEditText {
+class EmailEditText : TextInputEditText {
     constructor(context: Context) : super(context) {
         init()
     }
@@ -32,8 +32,8 @@ class PasswordEditText : TextInputEditText {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().isNotEmpty() && s.toString().length < 8) {
-                    error = context.getString(R.string.err_msg_min_char, 8)
+                if (s.toString().isNotEmpty() && !s.toString().contains("@")) {
+                    error = this@EmailEditText.context.getString(R.string.err_msg_email)
                 }
             }
 

@@ -61,8 +61,9 @@
                     android:id="@+id/iv_preview"
                     android:layout_width="280dp"
                     android:layout_height="280dp"
+                    android:contentDescription="@string/story_image"
                     android:src="@drawable/ic_place_holder"
-                    android:contentDescription="@string/story_image" />
+                    tools:ignore="ImageContrastCheck" />
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
@@ -81,7 +82,7 @@
         android:layout_height="wrap_content"
         style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Primary"
         android:text="@string/post"
-        app:icon="@drawable/ic_camera"
+        app:icon="@drawable/ic_send"
         app:layout_anchor="@id/bottomAppBar" />
 
 

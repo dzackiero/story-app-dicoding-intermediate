@@ -3,6 +3,7 @@ package com.pnj.storyapp.data.retrofit
 import com.pnj.storyapp.data.response.LoginResponse
 import com.pnj.storyapp.data.response.MessageResponse
 import com.pnj.storyapp.data.response.StoriesResponse
+import com.pnj.storyapp.data.response.StoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Field
@@ -12,6 +13,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -34,6 +36,12 @@ interface ApiService {
     suspend fun getStories(
         @Header("Authorization") token: String,
     ): StoriesResponse
+
+    @GET("stories/{id}")
+    suspend fun getDetailStory(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): StoryResponse
 
     @Multipart
     @POST("stories")

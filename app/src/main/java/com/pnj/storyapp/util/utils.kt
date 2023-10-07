@@ -27,7 +27,6 @@ object ValidateType {
     const val MIN_CHAR = 1
     const val MAX_CHAR = 2
     const val EMAIL = 3
-
 }
 
 private const val MAXIMAL_SIZE = 1000000
@@ -74,11 +73,21 @@ fun ImageView.loadImage(context: Context, url: String) {
         .into(this)
 }
 
-fun EditText.validate(errorMessage: String, validateType: Int, num: Int = 0): Boolean {
+fun EditText.validate(
+    name: String = "field",
+    validateType: Int,
+    num: Int = 0,
+    msg: String? = null
+): Boolean {
     val text = this.text.toString().trim()
     when (validateType) {
         ValidateType.REQUIRED -> {
             if (text.isEmpty()) {
+                var errorMessage = msg
+                if (errorMessage == null) {
+                    errorMessage =
+                        context.getString(com.pnj.storyapp.R.string.err_msg_required, name)
+                }
                 this.error = errorMessage
                 return false
             }
@@ -86,6 +95,11 @@ fun EditText.validate(errorMessage: String, validateType: Int, num: Int = 0): Bo
 
         ValidateType.MIN_CHAR -> {
             if (text.length < num) {
+                var errorMessage = msg
+                if (errorMessage == null) {
+                    errorMessage =
+                        context.getString(com.pnj.storyapp.R.string.err_msg_min_char, num)
+                }
                 this.error = errorMessage
                 return false
             }
@@ -93,6 +107,11 @@ fun EditText.validate(errorMessage: String, validateType: Int, num: Int = 0): Bo
 
         ValidateType.MAX_CHAR -> {
             if (text.length > num) {
+                var errorMessage = msg
+                if (errorMessage == null) {
+                    errorMessage =
+                        context.getString(com.pnj.storyapp.R.string.err_msg_min_char, num)
+                }
                 this.error = errorMessage
                 return false
             }
@@ -100,6 +119,11 @@ fun EditText.validate(errorMessage: String, validateType: Int, num: Int = 0): Bo
 
         ValidateType.EMAIL -> {
             if (!text.contains("@")) {
+                var errorMessage = msg
+                if (errorMessage == null) {
+                    errorMessage =
+                        context.getString(com.pnj.storyapp.R.string.err_msg_email)
+                }
                 this.error = errorMessage
                 return false
             }

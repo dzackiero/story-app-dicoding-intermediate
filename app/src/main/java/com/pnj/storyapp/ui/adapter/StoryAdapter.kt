@@ -1,15 +1,20 @@
 package com.pnj.storyapp.ui.adapter
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.RecyclerView
 import com.pnj.storyapp.data.model.Story
 import com.pnj.storyapp.databinding.StoryItemBinding
+import com.pnj.storyapp.ui.detail.DetailActivity
 import com.pnj.storyapp.util.loadImage
 
 class StoryAdapter(
     private val dataset: List<Story>,
-    private val listener: ((Story) -> Unit)? = null
 ) : RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
 
     inner class StoryViewHolder(
@@ -34,8 +39,21 @@ class StoryAdapter(
             ivItemPhoto.loadImage(holder.itemView.context, story.photoUrl)
         }
 
-        listener?.let {
-            holder.itemView.setOnClickListener { it(story) }
+        holder.apply {
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.ID_KEY, story.id)
+
+                val optionsCompat: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        itemView.context as Activity,
+                        Pair(binding.tvItemName as View, "name"),
+                        Pair(binding.tvItemDescription as View, "description"),
+                        Pair(binding.ivItemPhoto as View, "photo")
+                    )
+
+                itemView.context.startActivity(intent, optionsCompat.toBundle())
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.pnj.storyapp.data.repository
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
@@ -9,14 +8,12 @@ import com.pnj.storyapp.data.pref.UserPreferences
 import com.pnj.storyapp.data.response.LoginResponse
 import com.pnj.storyapp.data.response.MessageResponse
 import com.pnj.storyapp.data.response.StoriesResponse
+import com.pnj.storyapp.data.response.StoryResponse
 import com.pnj.storyapp.data.retrofit.ApiService
 import com.pnj.storyapp.util.Result
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import retrofit2.http.Header
-import retrofit2.http.Part
 
 class StoryRepository(
     private val apiService: ApiService,
@@ -42,6 +39,27 @@ class StoryRepository(
             } catch (e: Exception) {
                 emit(Result.Error("Error : ${e.message.toString()}"))
                 Log.d("Upload Exception", e.message.toString())
+            }
+        }
+
+    fun getDetailStory(
+        token: String,
+        id: String
+    ): LiveData<Result<StoryResponse>> =
+        liveData {
+            emit(Result.Loading)
+            try {
+                val response = apiService.getDetailStory("Bearer $token", id)
+                if (response.error) {
+                    emit(Result.Error("Detail Error: ${response.message}"))
+                    Log.d("Detail Error", response.message)
+                } else {
+                    emit(Result.Success(response))
+                    Log.d("Detail Success", response.message)
+                }
+            } catch (e: Exception) {
+                emit(Result.Error("Error : ${e.message.toString()}"))
+                Log.d("Detail Exception", e.message.toString())
             }
         }
 

@@ -8,7 +8,6 @@ import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture

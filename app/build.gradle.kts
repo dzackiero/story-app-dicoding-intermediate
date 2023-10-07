@@ -15,6 +15,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "https://story-api.dicoding.dev/v1/")
     }
 
     buildFeatures {
@@ -53,7 +55,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     //ktx
-    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.activity:activity-ktx:1.8.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     // Retrofit

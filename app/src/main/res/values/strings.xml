@@ -31,7 +31,11 @@
     <string name="permission_request_granted">Permission request granted</string>
     <string name="permission_request_denied">Permission request denied</string>
     <string name="no_internet">No internet</string>
-    <string name="something_wrong">Something wrong...</string>
+    <string name="something_wrong">Something wrong…</string>
     <string name="cancel">Cancel</string>
     <string name="are_you_sure_you_want_to_logout">Are you sure you want to logout?</string>
+    <string name="err_msg_required">%1$s is required</string>
+    <string name="err_msg_min_char">Minimum character length is %1$d</string>
+    <string name="err_msg_max_char">Maximum character length is %1$d</string>
+    <string name="err_msg_email">Invalid email address</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.pnj.storyapp.data.repository.StoryRepository
 import com.pnj.storyapp.di.Injection
 import com.pnj.storyapp.ui.add_story.AddStoryViewModel
+import com.pnj.storyapp.ui.detail.DetailViewModel
 import com.pnj.storyapp.ui.home.HomeViewModel
 import com.pnj.storyapp.ui.login.LoginViewModel
 import com.pnj.storyapp.ui.register.RegisterViewModel
@@ -23,6 +24,8 @@ class ViewModelFactory(private val storyRepository: StoryRepository) :
             return HomeViewModel(storyRepository) as T
         } else if (modelClass.isAssignableFrom(AddStoryViewModel::class.java)) {
             return AddStoryViewModel(storyRepository) as T
+        } else if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
+            return DetailViewModel(storyRepository) as T
         }
         throw UnsupportedOperationException("Unknown ViewModel class: " + modelClass.name)
     }
