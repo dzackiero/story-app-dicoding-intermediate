@@ -39,7 +39,7 @@ class StoryListAdapter
             holder.apply {
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.ID_KEY, story.id)
+                    intent.putExtra(DetailActivity.STORY_KEY, story)
 
                     val optionsCompat: ActivityOptionsCompat =
                         ActivityOptionsCompat.makeSceneTransitionAnimation(

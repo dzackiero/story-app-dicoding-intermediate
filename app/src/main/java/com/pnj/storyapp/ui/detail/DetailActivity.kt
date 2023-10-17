@@ -1,9 +1,11 @@
 package com.pnj.storyapp.ui.detail
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.pnj.storyapp.data.model.Story
 import com.pnj.storyapp.databinding.ActivityDetailBinding
 import com.pnj.storyapp.ui.ViewModelFactory
 import com.pnj.storyapp.util.Result
@@ -19,17 +21,23 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val storyId = intent.getStringExtra(ID_KEY)
+        val story = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(STORY_KEY, Story::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(STORY_KEY)
+        }
 
-        if (storyId != null) {
+        if (story != null) {
             viewModel.getSessionData().observe(this) { user ->
-                loadStory(user.token, storyId)
+                loadStory(user.token, story)
             }
+
         }
     }
 
-    private fun loadStory(token: String, id: String) {
-        viewModel.getDetailStory(token, id).observe(this) { result ->
+    private fun loadStory(token: String, localStory: Story) {
+        viewModel.getDetailStory(token, localStory.id).observe(this) { result ->
             if (result != null) {
                 when (result) {
                     is Result.Loading -> {
@@ -38,6 +46,11 @@ class DetailActivity : AppCompatActivity() {
 
                     is Result.Error -> {
                         binding.progressbar.isVisible = false
+                        binding.apply {
+                            tvDetailName.text = localStory.name
+                            tvDetailDescription.text = localStory.description
+                            ivDetailPhoto.loadImage(this@DetailActivity, localStory.photoUrl)
+                        }
                         showToast(result.error)
                     }
 
@@ -52,12 +65,10 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
-
     }
 
     companion object {
-        const val ID_KEY = "id_key"
+        const val STORY_KEY = "story_key"
     }
 }
