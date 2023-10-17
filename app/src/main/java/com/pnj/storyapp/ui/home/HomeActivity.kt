@@ -7,23 +7,28 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pnj.storyapp.R
 import com.pnj.storyapp.data.model.UserModel
 import com.pnj.storyapp.databinding.ActivityHomeBinding
 import com.pnj.storyapp.ui.ViewModelFactory
-import com.pnj.storyapp.ui.adapter.StoryAdapter
+import com.pnj.storyapp.ui.adapter.LoadingStateAdapter
+import com.pnj.storyapp.ui.adapter.StoryListAdapter
 import com.pnj.storyapp.ui.add_story.AddStoryActivity
 import com.pnj.storyapp.ui.main.MainActivity
-import com.pnj.storyapp.util.Result
 import com.pnj.storyapp.util.showToast
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private val viewModel: HomeViewModel by viewModels { ViewModelFactory.getInstance(this) }
     private var isDarkMode = false
+    private val adapter = StoryListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +43,16 @@ class HomeActivity : AppCompatActivity() {
                 startActivity(intent)
             } else {
                 setupView()
+                setupAction()
                 loadStories(user)
-                setupAction(user)
             }
         }
     }
 
     private fun setupView() {
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvStories.layoutManager = layoutManager
+
         viewModel.getThemeSetting().observe(this) {
             isDarkMode = it
             if (isDarkMode) {
@@ -55,7 +63,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupAction(user: UserModel) {
+    private fun setupAction() {
         binding.fabNewStory.setOnClickListener {
             val intent = Intent(this, AddStoryActivity::class.java)
             startActivity(intent)
@@ -82,33 +90,43 @@ class HomeActivity : AppCompatActivity() {
             true
         }
 
-        binding.swipeStories.setOnRefreshListener { loadStories(user) }
+        binding.swipeStories.setOnRefreshListener {
+            binding.swipeStories.isRefreshing = true
+            adapter.refresh()
+        }
     }
 
     private fun loadStories(user: UserModel) {
-        viewModel.getStories(user.token).observe(this) { result ->
-            if (result != null) {
-                when (result) {
-                    is Result.Loading -> {
-                        binding.swipeStories.isRefreshing = true
-                        binding.noInternetIcon.isVisible = false
-                    }
+        binding.rvStories.adapter = adapter.withLoadStateFooter(
+            LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
 
-                    is Result.Error -> {
-                        showToast(result.error)
-                        binding.apply {
-                            swipeStories.isRefreshing = false
-                            noInternetIcon.isVisible = true
-                        }
-                    }
+        viewModel.getStories(user.token).observe(this) {
+            adapter.submitData(lifecycle, it)
 
-                    is Result.Success -> {
+            binding.noInternetIcon.isVisible = adapter.itemCount < 0
+        }
+
+        lifecycleScope.launch {
+            adapter.loadStateFlow.collectLatest { loadStates ->
+                when (loadStates.refresh) {
+                    is LoadState.NotLoading -> {
                         binding.swipeStories.isRefreshing = false
-                        binding.noInternetIcon.isVisible = false
-                        val layoutManager = LinearLayoutManager(this)
-                        binding.rvStories.layoutManager = layoutManager
-                        binding.rvStories.adapter = StoryAdapter(result.data.listStory)
                     }
+
+                    is LoadState.Error -> {
+                        binding.swipeStories.isRefreshing = false
+                        showToast(
+                            getString(
+                                R.string.error,
+                                (loadStates.refresh as LoadState.Error).error.message.toString()
+                            )
+                        )
+                    }
+
+                    else -> Unit
                 }
             }
         }

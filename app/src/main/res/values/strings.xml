@@ -38,4 +38,6 @@
     <string name="err_msg_min_char">Minimum character length is %1$d</string>
     <string name="err_msg_max_char">Maximum character length is %1$d</string>
     <string name="err_msg_email">Invalid email address</string>
+    <string name="retry">Retry</string>
+    <string name="error">Error: %1$s</string>
 </resources>
