@@ -30,6 +30,7 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         viewModel.getSessionData().observe(this@HomeActivity) { user ->
             if (!user.isLogin) {
                 val intent = Intent(this, MainActivity::class.java)

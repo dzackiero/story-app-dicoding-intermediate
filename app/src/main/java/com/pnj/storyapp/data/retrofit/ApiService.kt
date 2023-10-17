@@ -38,7 +38,7 @@ interface ApiService {
     ): StoriesResponse
 
     @GET("stories/{id}")
-    suspend fun getDetailStory(
+    fun getDetailStory(
         @Header("Authorization") token: String,
         @Path("id") id: String
     ): StoryResponse

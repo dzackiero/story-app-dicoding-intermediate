@@ -89,7 +89,7 @@ class RegisterActivity : AppCompatActivity() {
     private fun validateForm(): Boolean {
         binding.apply {
             val validates = listOf(
-                edRegisterEmail.validate("Email", ValidateType.REQUIRED),
+                edRegisterEmail.validate("Email", ValidateType.REQUIRED, 0),
                 edRegisterEmail.validate("Email", ValidateType.EMAIL),
                 edRegisterName.validate("Name", ValidateType.REQUIRED),
                 edRegisterPassword.validate("Password", ValidateType.REQUIRED),

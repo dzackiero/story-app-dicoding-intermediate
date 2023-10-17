@@ -26,6 +26,7 @@ class EmailEditText : TextInputEditText {
 
     private fun init() {
 
+
         addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 // do nothing
