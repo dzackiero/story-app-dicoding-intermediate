@@ -41,4 +41,6 @@
     <string name="err_msg_email">Alamat email tidak valid</string>
     <string name="retry">Coba Lagi</string>
     <string name="error">Error: %1$s</string>
+    <string name="map_view">Peta</string>
+    <string name="set_location_with_my_location">Tambahkan lokasi dengan lokasi saya</string>
 </resources>

@@ -9,6 +9,7 @@ import com.pnj.storyapp.ui.add_story.AddStoryViewModel
 import com.pnj.storyapp.ui.detail.DetailViewModel
 import com.pnj.storyapp.ui.home.HomeViewModel
 import com.pnj.storyapp.ui.login.LoginViewModel
+import com.pnj.storyapp.ui.map.MapsViewModel
 import com.pnj.storyapp.ui.register.RegisterViewModel
 
 class ViewModelFactory(private val storyRepository: StoryRepository) :
@@ -26,6 +27,8 @@ class ViewModelFactory(private val storyRepository: StoryRepository) :
             return AddStoryViewModel(storyRepository) as T
         } else if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
             return DetailViewModel(storyRepository) as T
+        } else if (modelClass.isAssignableFrom(MapsViewModel::class.java)) {
+            return MapsViewModel(storyRepository) as T
         }
         throw UnsupportedOperationException("Unknown ViewModel class: " + modelClass.name)
     }

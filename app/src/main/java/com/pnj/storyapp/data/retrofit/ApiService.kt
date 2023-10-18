@@ -38,7 +38,13 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("page") page: Int = 1,
         @Query("size") size: Int = 20,
-        @Query("location") location: Boolean = false
+    ): StoriesResponse
+
+    @GET("stories")
+    suspend fun getStoriesWithLocation(
+        @Header("Authorization") token: String,
+        @Query("size") size: Int = 20,
+        @Query("location") location: Int = 1
     ): StoriesResponse
 
     @GET("stories/{id}")
@@ -53,5 +59,7 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
+        @Part("lat") lat: RequestBody? = null,
+        @Part("lon") lon: RequestBody? = null
     ): MessageResponse
 }

@@ -10,8 +10,11 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.pnj.storyapp.R
 import com.pnj.storyapp.data.model.UserModel
 import com.pnj.storyapp.databinding.ActivityAddStoryBinding
@@ -27,10 +30,7 @@ import com.pnj.storyapp.util.showLoading
 import com.pnj.storyapp.util.showToast
 import com.pnj.storyapp.util.uriToFile
 import com.pnj.storyapp.util.validate
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 class AddStoryActivity : AppCompatActivity() {
 
@@ -38,6 +38,8 @@ class AddStoryActivity : AppCompatActivity() {
     private val viewModel: AddStoryViewModel by viewModels { ViewModelFactory.getInstance(this) }
 
     private var currentImageUri: Uri? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -49,15 +51,59 @@ class AddStoryActivity : AppCompatActivity() {
             }
         }
 
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                showToast(getString(R.string.permission_request_granted), true)
+            }
+
+            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                showToast(getString(R.string.permission_request_granted), true)
+            }
+
+            else -> {
+                showToast(getString(R.string.permission_request_denied), true)
+            }
+        }
+    }
+
+    private fun cameraPermissionGranted() =
+        ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+
+    private fun locationPermissionGranted() =
+        (ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+                )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (!allPermissionsGranted()) {
-            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+        if (!cameraPermissionGranted()) {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
+
+        if (!locationPermissionGranted()) {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         viewModel.getSessionData().observe(this@AddStoryActivity) { user ->
             if (!user.isLogin) {
@@ -99,35 +145,46 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun allPermissionsGranted() =
-        ContextCompat.checkSelfPermission(
-            this,
-            REQUIRED_PERMISSION
-        ) == PackageManager.PERMISSION_GRANTED
-
     private fun showImage() {
         currentImageUri?.let { uri ->
-            Log.d("Image URI", "showImage: $uri")
             binding.ivPreview.setImageURI(uri)
-        } ?: {
-            Log.d("Empty Image", "Image is empty")
-        }
+        } ?: showToast("Image is empty")
     }
 
     private fun uploadImage(token: String, description: String) {
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
-            Log.d("Image File", "showImage: ${imageFile.path}")
+            if (
+                ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                fusedLocationClient.lastLocation.addOnSuccessListener { loc ->
+                    val isChecked = binding.checkboxAddLocation.isChecked
+                    val lat: Double? = if (isChecked) loc.latitude else null
+                    val lon: Double? = if (isChecked) loc.longitude else null
 
-            val requestBody = description.toRequestBody("text/plain".toMediaType())
-            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-            val multipartBody = MultipartBody.Part.createFormData(
-                "photo",
-                imageFile.name,
-                requestImageFile
-            )
+                    uploadStory(token, imageFile, description, lat, lon)
+                }
+            } else {
+                uploadStory(token, imageFile, description)
+            }
+        } ?: showToast(getString(R.string.image_is_required_to_make_a_story))
+    }
 
-            viewModel.uploadImage(token, multipartBody, requestBody).observe(this) { result ->
+    private fun uploadStory(
+        token: String,
+        imageFile: File,
+        description: String,
+        lat: Double? = null,
+        lon: Double? = null
+    ) {
+        viewModel.uploadImage(token, imageFile, description, lat, lon)
+            .observe(this) { result ->
                 if (result != null) {
                     when (result) {
                         is Result.Loading -> {
@@ -160,8 +217,6 @@ class AddStoryActivity : AppCompatActivity() {
                     }
                 }
             }
-
-        } ?: showToast(getString(R.string.image_is_required_to_make_a_story))
     }
 
     fun startGallery() {
@@ -192,9 +247,5 @@ class AddStoryActivity : AppCompatActivity() {
             currentImageUri = it.data?.getStringExtra(CameraActivity.EXTRA_CAMERAX_IMAGE)?.toUri()
             showImage()
         }
-    }
-
-    companion object {
-        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
     }
 }

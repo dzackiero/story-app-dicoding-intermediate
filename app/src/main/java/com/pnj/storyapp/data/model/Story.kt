@@ -14,6 +14,6 @@ data class Story(
     val createdAt: String,
     val name: String,
     val description: String,
-    val lon: Float,
-    val lat: Float
+    val lon: Double,
+    val lat: Double
 ) : Parcelable

@@ -19,6 +19,7 @@ import com.pnj.storyapp.ui.adapter.LoadingStateAdapter
 import com.pnj.storyapp.ui.adapter.StoryListAdapter
 import com.pnj.storyapp.ui.add_story.AddStoryActivity
 import com.pnj.storyapp.ui.main.MainActivity
+import com.pnj.storyapp.ui.map.MapsActivity
 import com.pnj.storyapp.util.showToast
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -87,6 +88,13 @@ class HomeActivity : AppCompatActivity() {
         val toggleThemeMenu: MenuItem = binding.topAppBar.menu.findItem(R.id.action_toggle_theme)
         toggleThemeMenu.setOnMenuItemClickListener {
             viewModel.saveThemeSetting(!isDarkMode)
+            true
+        }
+
+        val mapMenu: MenuItem = binding.topAppBar.menu.findItem(R.id.action_goto_map)
+        mapMenu.setOnMenuItemClickListener {
+            val intent = Intent(this, MapsActivity::class.java)
+            startActivity(intent)
             true
         }
 

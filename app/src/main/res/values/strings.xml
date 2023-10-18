@@ -40,4 +40,7 @@
     <string name="err_msg_email">Invalid email address</string>
     <string name="retry">Retry</string>
     <string name="error">Error: %1$s</string>
+    <string name="map_view">Map View</string>
+    <string name="title_activity_maps" translatable="false">MapsActivity</string>
+    <string name="set_location_with_my_location">Set location with my location</string>
 </resources>

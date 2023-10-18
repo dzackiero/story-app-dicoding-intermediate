@@ -15,6 +15,7 @@ import com.pnj.storyapp.data.model.UserModel
 import com.pnj.storyapp.data.pref.UserPreferences
 import com.pnj.storyapp.data.response.LoginResponse
 import com.pnj.storyapp.data.response.MessageResponse
+import com.pnj.storyapp.data.response.StoriesResponse
 import com.pnj.storyapp.data.response.StoryResponse
 import com.pnj.storyapp.data.retrofit.ApiService
 import com.pnj.storyapp.util.Result
@@ -31,12 +32,15 @@ class StoryRepository(
     fun uploadImage(
         token: String,
         imageUri: MultipartBody.Part,
-        description: RequestBody
+        description: RequestBody,
+        lat: RequestBody?,
+        lon: RequestBody?,
     ): LiveData<Result<MessageResponse>> =
         liveData {
             emit(Result.Loading)
             try {
-                val response = apiService.uploadStory("bearer $token", imageUri, description)
+                val response =
+                    apiService.uploadStory("bearer $token", imageUri, description, lat, lon)
                 if (response.error) {
                     emit(Result.Error("Upload Error: ${response.message}"))
                     Log.d("Upload Error", response.message)
@@ -71,6 +75,26 @@ class StoryRepository(
             }
         }
 
+    fun getStoriesWithLocation(
+        token: String,
+    ): LiveData<Result<StoriesResponse>> =
+        liveData {
+            emit(Result.Loading)
+            try {
+                val response = apiService.getStoriesWithLocation("Bearer $token")
+                if (response.error) {
+                    emit(Result.Error("Detail Error: ${response.message}"))
+                    Log.d("Location Error", response.message)
+                } else {
+                    emit(Result.Success(response))
+                    Log.d("Location Success", response.message)
+                }
+            } catch (e: Exception) {
+                emit(Result.Error("Error : ${e.message.toString()}"))
+                Log.d("Location Exception", e.message.toString())
+            }
+        }
+
     @OptIn(ExperimentalPagingApi::class)
     fun getStories(
         token: String
@@ -84,12 +108,6 @@ class StoryRepository(
                 database.storyDao().getAllStory()
             }
         ).liveData
-    }
-
-    fun getSession() = pref.getSession()
-
-    suspend fun logout() {
-        pref.logout()
     }
 
     fun registerUser(
@@ -149,6 +167,12 @@ class StoryRepository(
 
     suspend fun saveThemeSetting(isNightModeActive: Boolean) {
         pref.saveThemeSetting(isNightModeActive)
+    }
+
+    fun getSession() = pref.getSession()
+
+    suspend fun logout() {
+        pref.logout()
     }
 
     companion object {

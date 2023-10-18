@@ -10,4 +10,8 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_theme"
         />
+    <item android:id="@+id/action_goto_map"
+        android:title="@string/map_view"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_map"/>
 </menu>
