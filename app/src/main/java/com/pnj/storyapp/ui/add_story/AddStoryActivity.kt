@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -230,7 +229,6 @@ class AddStoryActivity : AppCompatActivity() {
             currentImageUri = uri
             showImage()
         } else {
-            Log.d("Photo Picker", getString(R.string.no_media_selected))
             showToast(getString(R.string.no_media_selected))
         }
     }

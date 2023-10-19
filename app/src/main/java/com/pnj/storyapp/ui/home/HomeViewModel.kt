@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.pnj.storyapp.data.model.UserModel
 import com.pnj.storyapp.data.repository.StoryRepository
 import kotlinx.coroutines.launch
@@ -13,7 +14,7 @@ class HomeViewModel(private val mStoryRepository: StoryRepository) : ViewModel()
         mStoryRepository.getSession().asLiveData()
 
     fun getStories(token: String) =
-        mStoryRepository.getStories(token)
+        mStoryRepository.getStories(token).cachedIn(viewModelScope)
 
     fun getThemeSetting(): LiveData<Boolean> = mStoryRepository.getThemeSetting().asLiveData()
 

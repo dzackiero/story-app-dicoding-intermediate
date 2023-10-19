@@ -27,6 +27,11 @@ android {
         buildConfig = true
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -90,4 +95,12 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.2.3")
     implementation("androidx.camera:camera-lifecycle:1.2.3")
     implementation("androidx.camera:camera-view:1.2.3")
+
+    //Testing
+    testImplementation("androidx.arch.core:core-testing:2.2.0") // InstantTaskExecutorRule
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("androidx.test:core:1.5.0")
+    testImplementation("org.mockito:mockito-core:4.4.0")
+    testImplementation("org.mockito:mockito-inline:4.4.0")
 }

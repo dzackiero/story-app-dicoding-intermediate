@@ -1,6 +1,5 @@
 package com.pnj.storyapp.data
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -65,7 +64,6 @@ class StoryRemoteMediator(
 
             MediatorResult.Success(endOfPaginationReached)
         } catch (e: Exception) {
-            Log.d("RemoteMediator", e.message.toString())
             MediatorResult.Error(e)
         }
     }
